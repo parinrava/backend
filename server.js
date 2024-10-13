@@ -1,13 +1,9 @@
-const http = require('http');
-// const sqlite3 = require('sqlite3').verbose();
+const http = require('https');
 const url = require('url');
 const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
-
-// Set the database path to a writable directory
 const dbPath = path.join('/home', 'patients.db');
 
-// Create the SQLite database
 const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
         console.error('Error opening database:', err.message);
@@ -16,10 +12,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
     }
 });
 
-// Create the SQLite database
-// const db = new sqlite3.Database('patients.db');
 
-// Ensure the patient table exists
 db.run(`CREATE TABLE IF NOT EXISTS patients (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,
@@ -35,7 +28,7 @@ function setCorsHeaders(res) {
 }
 
 
-// Server to handle requests
+
 const server = http.createServer((req, res) => {
     // Set CORS headers for every request
     setCorsHeaders(res);  
@@ -43,7 +36,6 @@ const server = http.createServer((req, res) => {
     // Handle preflight OPTIONS request
     if (req.method === 'OPTIONS') {
         setCorsHeaders(res);  // Ensure CORS headers are set for preflight requests too
-        // Respond with OK to preflight request
         res.writeHead(200);
         res.end();
         return;
