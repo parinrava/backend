@@ -12,7 +12,6 @@ const db = new sqlite3.Database(dbPath, (err) => {
     }
 });
 
-
 db.run(`CREATE TABLE IF NOT EXISTS patients (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,
@@ -20,23 +19,15 @@ db.run(`CREATE TABLE IF NOT EXISTS patients (
     gender TEXT
 )`);
 
-function setCorsHeaders(res) {
-    res.setHeader('Access-Control-Allow-Origin', 'https://blue-cliff-076d9a710.5.azurestaticapps.net');  // Allow your frontend origin
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');  // Allow the required methods
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');  // Allow required headers
-    res.setHeader('Access-Control-Allow-Credentials', 'true');  // Allow credentials if necessary
-}
-
-
-
 const server = http.createServer((req, res) => {
-    // Set CORS headers for every request
-    setCorsHeaders(res);  
-
     // Handle preflight OPTIONS request
     if (req.method === 'OPTIONS') {
-        setCorsHeaders(res);  // Ensure CORS headers are set for preflight requests too
-        res.writeHead(200);
+        res.writeHead(200, {
+            "Access-Control-Allow-Origin": "https://proud-bay-014af891e.5.azurestaticapps.net",
+            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Allow-Credentials": "true"
+        });
         res.end();
         return;
     }
@@ -52,10 +43,16 @@ const server = http.createServer((req, res) => {
             const query = `INSERT INTO patients (name, age, gender) VALUES (?, ?, ?)`;
             db.run(query, [patient.name, patient.age, patient.gender], function (err) {
                 if (err) {
-                    res.writeHead(500, { 'Content-Type': 'text/plain' });
+                    res.writeHead(500, {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "https://proud-bay-014af891e.5.azurestaticapps.net",
+                    });
                     res.end('Error inserting patient data.');
                 } else {
-                    res.writeHead(200, { 'Content-Type': 'text/plain' });
+                    res.writeHead(200, {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "https://proud-bay-014af891e.5.azurestaticapps.net",
+                    });
                     res.end('Patient data inserted successfully.');
                 }
             });
@@ -72,15 +69,24 @@ const server = http.createServer((req, res) => {
             if (query.trim().toUpperCase().startsWith('INSERT')) {
                 db.run(query, function (err) {
                     if (err) {
-                        res.writeHead(500, { 'Content-Type': 'text/plain' });
+                        res.writeHead(500, {
+                            "Content-Type": "application/json",
+                            "Access-Control-Allow-Origin": "https://proud-bay-014af891e.5.azurestaticapps.net",
+                        });
                         res.end('Error executing query.');
                     } else {
-                        res.writeHead(200, { 'Content-Type': 'text/plain' });
+                        res.writeHead(200, {
+                            "Content-Type": "application/json",
+                            "Access-Control-Allow-Origin": "https://proud-bay-014af891e.5.azurestaticapps.net",
+                        });
                         res.end('Query executed successfully.');
                     }
                 });
             } else {
-                res.writeHead(400, { 'Content-Type': 'text/plain' });
+                res.writeHead(400, {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "https://proud-bay-014af891e.5.azurestaticapps.net",
+                });
                 res.end('Only INSERT queries are allowed via POST.');
             }
         });
@@ -93,20 +99,32 @@ const server = http.createServer((req, res) => {
         if (sqlQuery.trim().toUpperCase().startsWith('SELECT')) {
             db.all(sqlQuery, [], (err, rows) => {
                 if (err) {
-                    res.writeHead(500, { 'Content-Type': 'text/plain' });
+                    res.writeHead(500, {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "https://proud-bay-014af891e.5.azurestaticapps.net",
+                    });
                     res.end('Error executing query.');
                 } else {
-                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.writeHead(200, {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "https://proud-bay-014af891e.5.azurestaticapps.net",
+                    });
                     res.end(JSON.stringify(rows));
                 }
             });
         } else {
-            res.writeHead(400, { 'Content-Type': 'text/plain' });
+            res.writeHead(400, {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "https://proud-bay-014af891e.5.azurestaticapps.net",
+            });
             res.end('Only SELECT queries are allowed via GET.');
         }
 
     } else {
-        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.writeHead(404, {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "https://proud-bay-014af891e.5.azurestaticapps.net",
+        });
         res.end('Not Found');
     }
 });
