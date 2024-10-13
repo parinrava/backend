@@ -23,7 +23,7 @@ const server = http.createServer((req, res) => {
     // Handle preflight OPTIONS request
     if (req.method === 'OPTIONS') {
         res.writeHead(200, {
-            "Access-Control-Allow-Origin": "https://proud-bay-014af891e.5.azurestaticapps.net",
+            "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
             "Access-Control-Allow-Headers": "Content-Type",
             "Access-Control-Allow-Credentials": "true"
