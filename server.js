@@ -28,9 +28,10 @@ db.run(`CREATE TABLE IF NOT EXISTS patients (
 )`);
 
 function setCorsHeaders(res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');  // Allow all origins (or restrict to your client domain)
+    res.setHeader('Access-Control-Allow-Origin', 'https://blue-cliff-076d9a710.5.azurestaticapps.net');  // Allow only your frontend
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');  // Allow GET, POST, OPTIONS methods
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');  // Only allow Content-Type header
+    res.setHeader('Access-Control-Allow-Credentials', 'true');  // Allow credentials if needed
 }
 
 // Server to handle requests
@@ -40,6 +41,7 @@ const server = http.createServer((req, res) => {
 
     // Handle preflight OPTIONS request
     if (req.method === 'OPTIONS') {
+        setCorsHeaders(res);  // Ensure CORS headers are set for preflight requests too
         // Respond with OK to preflight request
         res.writeHead(200);
         res.end();
